@@ -3,25 +3,40 @@ import React, { useContext, useState } from "react";
 const ModalContext = React.createContext();
 const UpdateModalContext = React.createContext();
 
+export const MODAL_ACTIONS = {
+  OPEN: "open",
+  CLOSE: "close",
+};
+
 export function useModal() {
-  return useContext(ModalContext)
+  return useContext(ModalContext);
 }
 
 export function useUpdateModal() {
-  return useContext(UpdateModalContext)
+  return useContext(UpdateModalContext);
 }
 
 export default function ModalProvider({ children }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  function toggleModal() {
-    console.log('finally here');
-    setIsModalOpen((prev) => !prev);
+  function updateModal(action) {
+    switch (action) {
+      case MODAL_ACTIONS.OPEN: {
+        setIsModalOpen(true);
+        break;
+      }
+      case MODAL_ACTIONS.CLOSE: {
+        setIsModalOpen(false);
+        break;
+      }
+      default:
+        break;
+    }
   }
 
   return (
-    <ModalContext.Provider value={isModalOpen}>
-      <UpdateModalContext.Provider value={toggleModal}>
+    <ModalContext.Provider value={ isModalOpen }>
+      <UpdateModalContext.Provider value={updateModal}>
         {children}
       </UpdateModalContext.Provider>
     </ModalContext.Provider>
